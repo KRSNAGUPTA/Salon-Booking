@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         const token = res.data.token;
         localStorage.setItem("token", token);
 
-        setUser(res.data.user);
+        setUser(res.data);
       }
       return res.data;
     } catch (error) {
@@ -34,12 +34,16 @@ export const AuthProvider = ({ children }) => {
       throw new Error("Name, email, and password are required");
     }
     try {
-      const res = await api.post("/api/users/register", { name, email, password });
+      const res = await api.post("/api/users/register", {
+        name,
+        email,
+        password,
+      });
       if (res.status === 201) {
         const token = res.data.token;
         localStorage.setItem("token", token);
 
-        setUser(res.data.user);
+        setUser(res.data);
       }
       return res.data;
     } catch (error) {
@@ -50,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     localStorage.removeItem("token");
-    setUser(null); 
+    setUser(null);
   };
 
   return (

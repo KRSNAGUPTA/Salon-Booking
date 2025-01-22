@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 
 const LoginSignupPage = () => {
-  const { toast } = useToast(); // Ensure toast is correctly retrieved from useToast hook
+  const { toast } = useToast();
   const { login, register } = useAuth();
   const navigate = useNavigate();
 

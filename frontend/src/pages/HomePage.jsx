@@ -1,13 +1,17 @@
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 import { FaStar, FaUsers } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
+  const navigate = useNavigate();
   return (
     <>
-      <div className="fixed top-0 w-full z-50 bg-black">
+      <div className="fixed top-4  w-full z-5">
         <Header />
       </div>
+      <Toaster />
       <section className="bg-gradient-to-r from-[#FF6F61] to-[#FFC1B6] min-h-screen flex items-center">
         <div className="container mx-auto px-6 md:px-12 lg:px-16 py-12 md:py-16 lg:py-20">
           <div className="flex flex-col lg:flex-row items-center lg:gap-12">
@@ -20,7 +24,10 @@ export const HomePage = () => {
                 the comfort of your home.
               </h3>
               <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
-                <button className="px-6 py-3 bg-white text-[#FF6F61] font-semibold rounded shadow hover:bg-[#FFC1B6] transition duration-200">
+                <button
+                  className="px-6 py-3 bg-white text-[#FF6F61] font-semibold rounded shadow hover:bg-[#FFC1B6] transition duration-200"
+                  onClick={() => navigate("/salon")}
+                >
                   Explore Salons
                 </button>
                 <button className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded hover:bg-white hover:text-[#FF6F61] transition duration-200">
@@ -54,7 +61,8 @@ export const HomePage = () => {
             {[
               {
                 title: "Search for Top Salons",
-                description: "Use advanced filters to find the perfect salon for you.",
+                description:
+                  "Use advanced filters to find the perfect salon for you.",
               },
               {
                 title: "Easy Online Booking",
