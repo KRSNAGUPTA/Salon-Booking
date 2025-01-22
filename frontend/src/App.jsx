@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import { ToastProvider } from "./components/ui/toast";
 import { AuthProvider } from "./contexts/authContext";
+import SalonsPage from "./pages/SalonListingPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/salon" element={<SalonsPage />} />
           </Routes>
         </Router>
       </AuthProvider>
