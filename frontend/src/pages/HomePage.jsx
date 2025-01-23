@@ -37,14 +37,20 @@ export const HomePage = () => {
                 >
                   Explore Salons
                 </button>
-                {user?.role !== "salon_owner" ? (
+                {user?.role != "salon_owner" ? (
                       <button onClick={()=>navigate("/salon/register")} className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded hover:bg-white hover:text-[#FF6F61] transition duration-200">
                         Register Your Salon
                       </button>
                     
                 ) : (
-                  <div>Dashboard</div>
+                  <button onClick={()=>navigate("/salon/dashboard")} className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded hover:bg-white hover:text-[#FF6F61] transition duration-200">
+                        Dashboard
+                      </button>
                 )}
+                {
+                  // console.log(`Got user ${user.role}`);
+                  console.log(user)
+                }
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-6 text-white justify-center lg:justify-start">
                 <div className="flex items-center">
