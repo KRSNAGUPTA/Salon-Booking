@@ -7,12 +7,13 @@ import { AuthProvider } from "./contexts/authContext";
 import SalonsPage from "./pages/SalonListingPage";
 import RegisterSalon from "./pages/RegisterSalon";
 import Authorized from "./Middleware/Authorized";
+import SalonDashboard from "./pages/SalonDashboard";
 
 function App() {
   return (
     <ToastProvider>
-      <AuthProvider>
         <Router>
+      <AuthProvider>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<Login />} />
@@ -20,9 +21,12 @@ function App() {
             <Route path="/salon/register" element={<Authorized>
               <RegisterSalon />
             </Authorized>} />
+            <Route path="/salon/dashboard" element={<Authorized>
+              <SalonDashboard />
+            </Authorized>} />
           </Routes>
-        </Router>
       </AuthProvider>
+        </Router>
     </ToastProvider>
   );
 }
