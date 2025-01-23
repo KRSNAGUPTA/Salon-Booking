@@ -1,11 +1,18 @@
 import Header from "@/components/Header";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Toaster } from "@/components/ui/toaster";
+import { useAuth } from "@/contexts/authContext";
+import { PopoverContent } from "@radix-ui/react-popover";
 import React from "react";
 import { FaStar, FaUsers } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   return (
     <>
       <div className="fixed top-4  w-full z-5">
@@ -30,9 +37,14 @@ export const HomePage = () => {
                 >
                   Explore Salons
                 </button>
-                <button className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded hover:bg-white hover:text-[#FF6F61] transition duration-200">
-                  Register Your Salon
-                </button>
+                {user?.role !== "salon_owner" ? (
+                      <button onClick={()=>navigate("/salon/register")} className="px-6 py-3 bg-transparent border-2 border-white text-white font-semibold rounded hover:bg-white hover:text-[#FF6F61] transition duration-200">
+                        Register Your Salon
+                      </button>
+                    
+                ) : (
+                  <div>Dashboard</div>
+                )}
               </div>
               <div className="flex flex-col sm:flex-row items-center gap-6 text-white justify-center lg:justify-start">
                 <div className="flex items-center">
