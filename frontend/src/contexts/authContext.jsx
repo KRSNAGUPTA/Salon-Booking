@@ -1,5 +1,6 @@
 import api from "@/config/api";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -8,78 +9,68 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   const fetchProfile = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
+      setLoading(false);
       return;
     }
     try {
       const res = await api.get("/api/users/profile", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(res)
-      setUser(res?.data)
-    } catch {
+      setUser(res.data.user);
+      localStorage.setItem("user", JSON.stringify(res.data)); 
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/login");
+    } finally {
+      setLoading(false);
     }
   };
-  useEffect(()=>{
-    fetchProfile()
-  },[])
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   const login = async (email, password) => {
-    if (!email || !password) {
-      throw new Error("Email and password are required");
-    }
+    setLoading(true);
     try {
       const res = await api.post("/api/users/login", { email, password });
       if (res.status === 200) {
         const token = res.data.token;
         localStorage.setItem("token", token);
-
+        localStorage.setItem("user", JSON.stringify(res.data)); 
         setUser(res.data);
       }
       return res.data;
     } catch (error) {
       console.error("Login failed:", error);
       throw new Error("Failed to login. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const register = async (name, email, password) => {
-    if (!name || !email || !password) {
-      throw new Error("Name, email, and password are required");
-    }
-    try {
-      const res = await api.post("/api/users/register", {
-        name,
-        email,
-        password,
-      });
-      if (res.status === 201) {
-        const token = res.data.token;
-        localStorage.setItem("token", token);
-
-        setUser(res.data);
-      }
-      return res.data;
-    } catch (error) {
-      console.error("Registration failed:", error);
-      throw new Error("Failed to register. Please try again.");
-    }
-  };
-
-  const logout = async () => {
+  const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
+    navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
